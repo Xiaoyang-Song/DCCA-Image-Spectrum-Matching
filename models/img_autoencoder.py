@@ -89,12 +89,13 @@ def train_autoencoder(model, num_epochs, optimizer, t_loader, device=DEVICE):
     for epoch in range(num_epochs):
         train_loss_avg.append(0)
         num_batches = 0
-        for image_batch, _ in t_loader:
+        for image_batch in t_loader:
             image_batch = image_batch.to(device)
             # autoencoder reconstruction
             image_batch_recon = model(image_batch)
             # reconstruction error
-            loss = F.mse_loss(image_batch_recon, image_batch)
+            loss = F.binary_cross_entropy(image_batch_recon, image_batch)
+            # loss = F.mse_loss(image_batch_recon, image_batch)
             # backpropagation
             optimizer.zero_grad()
             loss.backward()
