@@ -2,6 +2,7 @@ import torch
 from torchinfo import summary
 import torchvision
 import torch.nn as nn
+import torch.nn.functional as F
 from icecream import ic
 
 
