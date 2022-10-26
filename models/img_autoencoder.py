@@ -85,7 +85,7 @@ def train_autoencoder(model, num_epochs, optimizer, t_loader, device=DEVICE):
 
     model.train()
     train_loss_avg = []
-    print('Training ...')
+    print('Training Started...')
     for epoch in range(num_epochs):
         train_loss_avg.append(0)
         num_batches = 0
@@ -102,6 +102,7 @@ def train_autoencoder(model, num_epochs, optimizer, t_loader, device=DEVICE):
             # one step of the optmizer (using the gradients from backpropagation)
             optimizer.step()
             train_loss_avg[-1] += loss.item()
+            ic(f"loss: {loss.item()}")
             num_batches += 1
         train_loss_avg[-1] /= num_batches
         print('Epoch [%d / %d] average reconstruction error: %f' %
