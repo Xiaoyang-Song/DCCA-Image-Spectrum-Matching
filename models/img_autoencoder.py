@@ -107,6 +107,7 @@ def train_autoencoder(model, num_epochs, optimizer, t_loader, device=DEVICE):
         train_loss_avg[-1] /= num_batches
         print('Epoch [%d / %d] average reconstruction error: %f' %
               (epoch+1, num_epochs, train_loss_avg[-1]))
+    return model, train_loss_avg
 
 
 if __name__ == '__main__':
