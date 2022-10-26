@@ -5,10 +5,14 @@ import torch.nn as nn
 import torch.nn.functional as F
 from icecream import ic
 
-DEVICE = 'cuda' if torch
+# Define device
+DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
+
+# Credit: Architecture of Encoder and Decoder are borrowed frm Yanze Liu
+
 
 class Encoder(nn.Module):
-    def __init__(self):
+    def __init__(self, hidden):
         super().__init__()
         self.conv2d1 = nn.Conv2d(1, 16, kernel_size=(7, 7), padding=(3, 3))
         self.maxpool2d1 = nn.MaxPool2d((3, 3), return_indices=True)
@@ -18,7 +22,7 @@ class Encoder(nn.Module):
         self.linear1 = nn.Linear(in_features=17496, out_features=2560)
         self.linear2 = nn.Linear(in_features=2560, out_features=128)
         self.linear3 = nn.Linear(in_features=128, out_features=64)
-        self.linear4 = nn.Linear(in_features=64, out_features=6)
+        self.linear4 = nn.Linear(in_features=64, out_features=hidden)
 
     def forward(self, x):
         batch_size = x.shape[0]
@@ -35,9 +39,9 @@ class Encoder(nn.Module):
 
 
 class Decoder(nn.Module):
-    def __init__(self):
+    def __init__(self, hidden):
         super().__init__()
-        self.linear1 = nn.Linear(6, 64)
+        self.linear1 = nn.Linear(hidden, 64)
         self.linear2 = nn.Linear(64, 128)
         self.linear3 = nn.Linear(128, 2560)
         self.linear4 = nn.Linear(2560, 17496)
@@ -67,9 +71,9 @@ class Decoder(nn.Module):
 
 class AutoEncoder(nn.Module):
     def __init__(self, hidden_dim):
-        self.d = hidden_dim
-        self.encoder = Encoder(self.d)
-        self.decoder = Decoder(self.d)
+        super().__init__()
+        self.encoder = Encoder(hidden_dim)
+        self.decoder = Decoder(hidden_dim)
 
     def forward(self, x):
         output, indc1, indc2 = self.encoder(x)
@@ -105,3 +109,4 @@ def train_autoencoder(model, num_epochs, optimizer, t_loader, device=DEVICE):
 
 if __name__ == '__main__':
     ic("CT Image Autoencoder Backbone")
+    model = AutoEncoder(6)
