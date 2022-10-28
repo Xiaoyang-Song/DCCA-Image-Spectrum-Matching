@@ -25,6 +25,7 @@ def raw_to_processed(raw_path, processed_path,
     hmax = clip_dict['hmax']
     wmin = clip_dict['wmin']
     wmax = clip_dict['wmax']
+    print("Processing raw images by clipping and denoising ...")
     for i in tqdm(image_addr_list):
         full_path = os.path.join(raw_path, i)
         img = Image.open(full_path).convert('RGB')
@@ -39,7 +40,7 @@ def raw_to_processed(raw_path, processed_path,
         Image.fromarray(thresh1).save(processed_path + i)
 
 
-def processed_to_final(processed_path, save_path, min_area, max_area):
+def processed_to_final(processed_path, save_path, pole_dict={'min_a': 20, 'max_a': 20000}):
     """
     Convert processed denoised images to final defects-only images
     Args:
@@ -50,7 +51,8 @@ def processed_to_final(processed_path, save_path, min_area, max_area):
     """
     num_defects = []
     image_addr_list = os.listdir(processed_path)
-    # min_area, max_area = 20, 20000
+    min_area, max_area = pole_dict['min_a'], pole_dict['max_a']
+    print("Extract poles-only (i.e. defects-only) images by heuristic contour finding ...")
     for i in tqdm(image_addr_list):
         full_path = os.path.join(processed_path, i)
         imgobj = Image.open(full_path).convert('RGB')
@@ -81,6 +83,12 @@ def processed_to_final(processed_path, save_path, min_area, max_area):
         Image.fromarray(img_arr).save(save_path + i)
 
 
-# TODO: wrap up code in image_processing.ipynb into this file
+def one_step_process(raw_path, processed_path, final_path,
+                     pole_dict={'min_a': 20, 'max_a': 20000},
+                     clip_dict={'hmin': 0, 'hmax': 250, 'wmin': 120, 'wmax': 850}):
+    raw_to_processed(raw_path, processed_path, clip_dict)
+    processed_to_final(processed_path, final_path, pole_dict)
+
+
 if __name__ == '__main__':
     ic("contour.py")
