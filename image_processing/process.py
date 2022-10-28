@@ -91,4 +91,4 @@ def one_step_process(raw_path, processed_path, final_path,
 
 
 if __name__ == '__main__':
-    ic("contour.py")
+    ic("process.py")
