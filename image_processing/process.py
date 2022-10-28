@@ -7,6 +7,37 @@ from PIL import Image
 import os
 from tqdm.notebook import tqdm
 
+# A Wrapper for functions illustrated in image_processing.ipynb
+
+
+def raw_to_processed(raw_path, processed_path,
+                     clip_dict={'hmin': 0, 'hmax': 250, 'wmin': 120, 'wmax': 850}):
+    """
+    Convert raw data into clipped & denoised images.
+    Args:
+        raw_path (str): path to raw images (locally "../Data/raw")
+        processed_path (str): saving path to processed images (locally "../Data/processed")
+        clip_dict (dict, optional): _description_. 
+            Defaults to {'hmin':0, 'hmax': 250, 'wmin':120, 'wmax':850}.
+    """
+    image_addr_list = os.listdir(raw_path)
+    hmin = clip_dict['hmin']
+    hmax = clip_dict['hmax']
+    wmin = clip_dict['wmin']
+    wmax = clip_dict['wmax']
+    for i in tqdm(image_addr_list):
+        full_path = os.path.join(raw_path, i)
+        img = Image.open(full_path).convert('RGB')
+        img_array = np.asarray(img)
+        # Clip
+        img_ = Image.fromarray(img_array[hmin:hmax, wmin:wmax], 'RGB')
+        img_ = cv.cvtColor(np.asarray(img_), cv.COLOR_BGR2GRAY)
+        # Denoise
+        _, thresh1 = cv.threshold(
+            img_, 255, 255, cv.THRESH_BINARY + cv.THRESH_OTSU)
+        # Save
+        Image.fromarray(thresh1).save(processed_path + i)
+
 
 def processed_to_final(processed_path, save_path, min_area, max_area):
     """
