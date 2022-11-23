@@ -46,7 +46,7 @@ class MLP(nn.Module):
 
 
 class DCCA(nn.Module):
-    def __init__(self, img: dict, spec: dict, use_all_singular_values, device=DEVICE):
+    def __init__(self, img: dict, spec: dict, device=DEVICE):
         super(DCCA, self).__init__()
         # Extract branch information: img
         self.img_in_dim = img['input_dim']

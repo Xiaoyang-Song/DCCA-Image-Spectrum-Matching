@@ -39,5 +39,5 @@ if __name__ == '__main__':
     x = torch.zeros((1,11,6))
     output, hn, cn = lstm(x)
     ic(output.shape)
-    ic(hn.shape)
+    ic(hn.squeeze().unsqueeze(0).shape)
     ic(cn.shape)
