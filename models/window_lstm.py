@@ -9,7 +9,7 @@ from icecream import ic
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 
-class ImgLSTM(nn.Module):
+class WindowLSTM(nn.Module):
     def __init__(self, input_dim, hidden_dim, num_layers):
         super().__init__()
         # Config
@@ -35,8 +35,8 @@ class ImgLSTM(nn.Module):
 if __name__ == '__main__':
     ic("Processing window of images")
     # Simple sanity check
-    lstm = ImgLSTM(6, 64, 1)
-    x = torch.zeros((3, 5, 6))
+    lstm = WindowLSTM(6, 64, 1)
+    x = torch.zeros((1,11,6))
     output, hn, cn = lstm(x)
     ic(output.shape)
     ic(hn.shape)

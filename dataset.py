@@ -70,7 +70,7 @@ class ImSpecTuple(Dataset):
 
     def to_tensor(self):
         self.image = [torch.tensor(x) for x in self.image]
-        self.spec = [torch.tensor(x) for x in self.spec]
+        self.spec = [torch.tensor(x).flatten(-2, -1) for x in self.spec]
 
     def __len__(self):
         return len(self.image)
