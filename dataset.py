@@ -29,10 +29,13 @@ def get_img_spec_window(spec_feat, img_feat, start_len, end_len):
 
 
 def preprocess_img_spec_tuple(spec_feat, img_feat, start_len, end_len, step_size):
+    dset = []
     cur_start = start_len
     cur_end = cur_start + step_size
     while cur_end <= end_len:
         spec, img = get_img_spec_window(
             spec_feat, img_feat, cur_start, cur_end)
+        dset.append((img, spec))
         cur_start += step_size
         cur_end += step_size
+    return dset
