@@ -64,8 +64,6 @@ class DCCA(nn.Module):
                              self.img_out_dim).double()
         self.spec_model = MLP(self.spec_in_dim, self.spec_layers,
                               self.spec_out_dim).double()
-        # CCA loss declaration
-        # self.loss = cca_loss(outdim_size, use_all_singular_values, device).loss
 
     def forward(self, img, spec):
 
