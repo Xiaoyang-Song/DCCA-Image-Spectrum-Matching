@@ -23,12 +23,15 @@ def train(model, tri_dset, val_dset, optimizer,
         for step, (img, spec) in enumerate(tri_dset):
             img = img.unsqueeze(0).float().to(DEVICE)
             spec = spec.unsqueeze(0).float().to(DEVICE)
+            # ic(img.shape)
+            # ic(spec.shape)
             # Zero Existing Gradients
             optimizer.zero_grad()
             # ic(img)
             # WindowDCCA Forward Pass
             out1, out2 = model(img, spec)
             loss = criterion(out1, out2)
+            # ic(loss)
             # Backward Pass
             loss.backward()
             # Gradient Update

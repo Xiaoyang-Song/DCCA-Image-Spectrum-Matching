@@ -47,4 +47,4 @@ if __name__ == '__main__':
     ic(output.shape)
     ic(hn.squeeze().unsqueeze(0).shape)
     ic(cn.shape)
-    ic(hn)
+    ic(hn.float())

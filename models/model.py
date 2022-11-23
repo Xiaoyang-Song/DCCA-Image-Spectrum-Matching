@@ -47,6 +47,7 @@ class WindowDCCA(nn.Module):
         # ic(img)
         out_img, hn_img, cn_img = self.ImgLSTM(img)
         out_spec, hn_spec, cn_spec = self.SpecLSTM(spec)
+        # ic(hn_img)
         # Process hidden state
         hn_img = hn_img.squeeze().unsqueeze(0)
         hn_spec = hn_spec.squeeze().unsqueeze(0)
