@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import numpy as np
+from icecream import ic
 
 # Credit: part (about 2/3) of the code is borrowed from the following Github Repo:
 # https://github.com/Michaelvll/DeepCCA/blob/master/DeepCCAModels.py
@@ -30,8 +31,8 @@ def make_layers(layer_dims):
 
 
 class MLP(nn.Module):
-    def __init__(self, layer_dims: list, input_dim, output_dim):
-        super(MLP, self).__init__()
+    def __init__(self, input_dim, layer_dims: list, output_dim):
+        super().__init__()
         self.input_dim = input_dim
         self.output_dim = output_dim
         self.layer_dims = [self.input_dim] + layer_dims + [self.output_dim]
@@ -47,7 +48,7 @@ class MLP(nn.Module):
 
 class DCCA(nn.Module):
     def __init__(self, img: dict, spec: dict, device=DEVICE):
-        super(DCCA, self).__init__()
+        super().__init__()
         # Extract branch information: img
         self.img_in_dim = img['input_dim']
         self.img_layers = img['layers']
@@ -61,9 +62,9 @@ class DCCA(nn.Module):
 
         # Models
         self.img_model = MLP(self.img_in_dim, self.img_layers,
-                             self.img_out_dim).double()
+                             self.img_out_dim)
         self.spec_model = MLP(self.spec_in_dim, self.spec_layers,
-                              self.spec_out_dim).double()
+                              self.spec_out_dim)
 
     def forward(self, img, spec):
 

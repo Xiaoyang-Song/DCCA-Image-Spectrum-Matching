@@ -1,42 +1,42 @@
 import torch
 import torch.nn as nn
 import numpy as np
-from window_lstm import *
-from dcca import *
+from models.window_lstm import *
+from models.dcca import *
 
 
 class WindowDCCA(nn.Module):
-    def __init__(self, img_input_dim, img_hidden_dim, img_out_dim,
-                 spec_input_dim, spec_hidden_dim, spec_out_dim,
+    def __init__(self, img_input_dim, img_hidden_dim, img_num_layers,
+                 spec_input_dim, spec_hidden_dim, spec_num_layers,
                  dcca_out_dim, dcca_img_layers, dcca_spec_layers):
         super().__init__()
         # Define Image WindowLSTM
         self.img_input_dim = img_input_dim
         self.img_hidden_dim = img_hidden_dim
-        self.img_out_dim = img_out_dim
+        self.img_num_layers = img_num_layers
 
         self.ImgLSTM = WindowLSTM(
-            self.img_input_dim, self.img_hidden_dim, self.img_out_dim)
+            self.img_input_dim, self.img_hidden_dim, self.img_num_layers)
 
         # Define Spectra ndowLSTM
         self.spec_input_dim = spec_input_dim
         self.spec_hidden_dim = spec_hidden_dim
-        self.spec_out_dim = spec_out_dim
+        self.spec_num_layers = spec_num_layers
 
         self.SpecLSTM = WindowLSTM(
-            self.spec_input_dim, self.spec_hidden_dim, self.spec_out_dim)
+            self.spec_input_dim, self.spec_hidden_dim, self.spec_num_layers)
 
         # Define DCCA network
         self.dcca_out_dim = dcca_out_dim
         self.dcca_img_layers = dcca_img_layers
         self.dcca_spec_layers = dcca_spec_layers
         self.img_branch = dict(
-            input_dim=self.img_out_dim,
+            input_dim=self.img_hidden_dim,
             layers=self.dcca_img_layers,
             output_dim=self.dcca_out_dim
         )
         self.spec_branch = dict(
-            input_dim=self.spec_out_dim,
+            input_dim=self.spec_hidden_dim,
             layers=self.dcca_spec_layers,
             output_dim=self.dcca_out_dim
         )

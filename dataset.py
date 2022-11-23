@@ -77,3 +77,9 @@ class ImSpecTuple(Dataset):
 
     def __getitem__(self, idx):
         return (self.image[idx], self.spec[idx])
+
+
+# def split_dset(dset: ImSpecTuple, val_ratio):
+#     n = len(dset)
+#     m = int(n * val_ratio)
+#     rand_val_idx = np.random.choice(0, n, m, replace=False)
