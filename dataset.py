@@ -1,6 +1,10 @@
 import torch
 import torch.nn as nn
 import numpy as np
+from torch.utils.data import Dataset
+from torchvision import datasets
+from torchvision.transforms import ToTensor
+import matplotlib.pyplot as plt
 
 
 # Return the feature given any start and end location (0 - 35mm)
@@ -29,13 +33,36 @@ def get_img_spec_window(spec_feat, img_feat, start_len, end_len):
 
 
 def preprocess_img_spec_tuple(spec_feat, img_feat, start_len, end_len, step_size):
-    dset = []
+    dset, spec_lst, img_lst = [], [], []
     cur_start = start_len
     cur_end = cur_start + step_size
     while cur_end <= end_len:
         spec, img = get_img_spec_window(
             spec_feat, img_feat, cur_start, cur_end)
         dset.append((img, spec))
+        spec_lst.append(spec)
+        img_lst.append(img)
         cur_start += step_size
         cur_end += step_size
-    return dset
+    return dset, spec_lst, img_lst
+
+
+class ImSpecTuple(Dataset):
+    def __init__(self, img, spec):
+        super().__init__()
+        assert type(img) == np.ndarray
+        assert type(spec) == np.ndarray
+        assert len(img) == len(spec)
+        self.image = img
+        self.spec = spec
+        self.to_tensor()
+
+    def to_tensor(self):
+        self.image = [torch.tensor(x) for x in self.image]
+        self.spec = [torch.tensor(x) for x in self.spec]
+
+    def __len__(self):
+        return len(self.image)
+
+    def __getitem__(self, idx):
+        return (self.image[idx], self.spec[idx])
