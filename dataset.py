@@ -47,6 +47,17 @@ def preprocess_img_spec_tuple(spec_feat, img_feat, start_len, end_len, step_size
     return dset, spec_lst, img_lst
 
 
+def save_dset(img, spec, dset, path):
+    torch.save({'image': img,
+                'spectra': spec,
+                'dset': dset}, path)
+
+
+def load_dset_instance(path):
+    dset = torch.load(path)
+    return ImSpecTuple(dset['image'], dset['spectra'])
+
+
 class ImSpecTuple(Dataset):
     def __init__(self, img, spec):
         super().__init__()
