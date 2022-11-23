@@ -4,6 +4,7 @@ import torchvision
 import torch.nn as nn
 import torch.nn.functional as F
 from icecream import ic
+from dataset import *
 
 # Define device
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -27,7 +28,10 @@ class WindowLSTM(nn.Module):
         assert len(x.shape) == 3
         assert x.shape[-1] == self.input_dim
         # Forward pass
-        output, (hn, cn) = self.lstm(x)
+        h0, c0 = torch.randn((x.shape[0], self.num_layers, self.hidden_dim)), torch.randn(
+            (x.shape[0], self.num_layers, self.hidden_dim))
+        output, (hn, cn) = self.lstm(x, (h0, c0))
+        # print(hn)
         # hn, cn: (B, self.num_layers, self.hidden_dim)
         return output, hn, cn
 
@@ -36,8 +40,11 @@ if __name__ == '__main__':
     ic("Processing window of images")
     # Simple sanity check
     lstm = WindowLSTM(6, 64, 1)
-    x = torch.zeros((1,11,6))
+    path = "Data/pairdata/dataset.pt"
+    tri_dset = load_dset_instance(path)
+    x = tri_dset[0][0].unsqueeze(0).float()
     output, hn, cn = lstm(x)
     ic(output.shape)
     ic(hn.squeeze().unsqueeze(0).shape)
     ic(cn.shape)
+    ic(hn)

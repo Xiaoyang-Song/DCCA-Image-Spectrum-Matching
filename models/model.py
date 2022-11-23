@@ -18,7 +18,7 @@ class WindowDCCA(nn.Module):
         self.ImgLSTM = WindowLSTM(
             self.img_input_dim, self.img_hidden_dim, self.img_num_layers)
 
-        # Define Spectra ndowLSTM
+        # Define Spectra WindowLSTM
         self.spec_input_dim = spec_input_dim
         self.spec_hidden_dim = spec_hidden_dim
         self.spec_num_layers = spec_num_layers
@@ -44,6 +44,7 @@ class WindowDCCA(nn.Module):
 
     def forward(self, img, spec):
         # Forward pass of LSTM
+        # ic(img)
         out_img, hn_img, cn_img = self.ImgLSTM(img)
         out_spec, hn_spec, cn_spec = self.SpecLSTM(spec)
         # Process hidden state

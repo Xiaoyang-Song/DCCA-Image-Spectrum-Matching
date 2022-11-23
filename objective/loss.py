@@ -6,7 +6,7 @@ import torch.nn as nn
 
 class CCA(nn.Module):
     def __init__(self, outdim_size, use_all_singular_values, device):
-        super(CCA, self).__init__()
+        super().__init__()
         self.outdim_size = outdim_size
         self.use_all_singular_values = use_all_singular_values
         self.device = device
@@ -23,18 +23,20 @@ class CCA(nn.Module):
         eps = 1e-9
 
         H1, H2 = H1.t(), H2.t()
-        # assert torch.isnan(H1).sum().item() == 0
-        # assert torch.isnan(H2).sum().item() == 0
+        # print(H1)
+        assert torch.isnan(H1).sum().item() == 0
+        assert torch.isnan(H2).sum().item() == 0
+        # print(H1.shape)
 
         o1 = o2 = H1.size(0)
 
         m = H1.size(1)
-#         print(H1.size())
-
+        # print(H1.size())
+        m = 2
         H1bar = H1 - H1.mean(dim=1).unsqueeze(dim=1)
         H2bar = H2 - H2.mean(dim=1).unsqueeze(dim=1)
-        # assert torch.isnan(H1bar).sum().item() == 0
-        # assert torch.isnan(H2bar).sum().item() == 0
+        assert torch.isnan(H1bar).sum().item() == 0
+        assert torch.isnan(H2bar).sum().item() == 0
 
         SigmaHat12 = (1.0 / (m - 1)) * torch.matmul(H1bar, H2bar.t())
         SigmaHat11 = (1.0 / (m - 1)) * torch.matmul(H1bar,

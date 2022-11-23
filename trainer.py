@@ -21,11 +21,11 @@ def train(model, tri_dset, val_dset, optimizer,
     tri_iter_count, val_iter_count = 0, 0
     for epoch in range(max_epoch):
         for step, (img, spec) in enumerate(tri_dset):
-            img = img.unsqueeze(0).to(DEVICE)
-            spec = spec.unsqueeze(0).to(DEVICE)
-
+            img = img.unsqueeze(0).float().to(DEVICE)
+            spec = spec.unsqueeze(0).float().to(DEVICE)
             # Zero Existing Gradients
             optimizer.zero_grad()
+            # ic(img)
             # WindowDCCA Forward Pass
             out1, out2 = model(img, spec)
             loss = criterion(out1, out2)

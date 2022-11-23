@@ -16,16 +16,16 @@ def make_layers(layer_dims):
     for l_id in range(len(layer_dims) - 1):
         if l_id == len(layer_dims) - 2:
             layers.append(nn.Sequential(
-                nn.BatchNorm1d(
-                    num_features=layer_dims[l_id], affine=False),
+                # nn.BatchNorm1d(
+                #     num_features=layer_dims[l_id], affine=False),
                 nn.Linear(layer_dims[l_id], layer_dims[l_id + 1]),
             ))
         else:
             layers.append(nn.Sequential(
                 nn.Linear(layer_dims[l_id], layer_dims[l_id + 1]),
                 nn.Sigmoid(),
-                nn.BatchNorm1d(
-                    num_features=layer_dims[l_id + 1], affine=False),
+                # nn.BatchNorm1d(
+                #     num_features=layer_dims[l_id + 1], affine=False),
             ))
     return layers
 
