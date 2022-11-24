@@ -30,7 +30,8 @@ class WindowLSTM(nn.Module):
         # Forward pass
         h0, c0 = torch.randn((x.shape[0], self.num_layers, self.hidden_dim)), torch.randn(
             (x.shape[0], self.num_layers, self.hidden_dim))
-        output, (hn, cn) = self.lstm(x, (h0, c0))
+        # output, (hn, cn) = self.lstm(x, (h0, c0))
+        output, (hn, cn) = self.lstm(x)
         # print(hn)
         # hn, cn: (B, self.num_layers, self.hidden_dim)
         return output, hn, cn
@@ -42,7 +43,7 @@ if __name__ == '__main__':
     lstm = WindowLSTM(6, 64, 1)
     path = "Data/pairdata/dataset.pt"
     tri_dset = load_dset_instance(path)
-    x = tri_dset[0][0].unsqueeze(0).float()
+    x = tri_dset[1][0].unsqueeze(0).float()
     output, hn, cn = lstm(x)
     ic(output.shape)
     ic(hn.squeeze().unsqueeze(0).shape)
