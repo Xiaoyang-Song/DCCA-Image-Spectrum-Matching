@@ -30,8 +30,8 @@ class WindowLSTM(nn.Module):
         # Forward pass
         h0, c0 = torch.randn((x.shape[0], self.num_layers, self.hidden_dim)), torch.randn(
             (x.shape[0], self.num_layers, self.hidden_dim))
-        # output, (hn, cn) = self.lstm(x, (h0, c0))
-        output, (hn, cn) = self.lstm(x)
+        output, (hn, cn) = self.lstm(x, (h0, c0))
+        # output, (hn, cn) = self.lstm(x)
         # print(hn)
         # hn, cn: (B, self.num_layers, self.hidden_dim)
         return output, hn, cn
